@@ -1,4 +1,4 @@
-profile        = "tikal"
+profile        = "terraform"
 vendor_name    = "tikal"
 region         = "eu-central-1"
 bucket         = "tikal-terraform-state"

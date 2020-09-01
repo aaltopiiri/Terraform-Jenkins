@@ -34,7 +34,7 @@ pipeline {
 				choices: [ 'plan', 'apply', 'destroy'],
 				description: 'Run terraform plan / apply / destroy')
 		string (name: 'PROFILE',
-			   defaultValue: 'tikal',
+			   defaultValue: 'terraform',
 			   description: 'Optional. Target aws profile defaults to tikal')
 		string (name: 'EMAIL',
 			   defaultValue: 'natanb@tikalk.com',
