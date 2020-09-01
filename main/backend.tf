@@ -1,8 +1,10 @@
 terraform {
+  required_version = ">=0.12.13"
   backend "s3" {
-    bucket         = "tikal-terraform-state"
-    region         = "eu-central-1"
-    dynamodb_table = "TikalTerraformStatelock"
-    key            = "main/terraform-tikal.tfstate"
+    bucket         = "aaltopiiri-terraform-bucket"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    dynamodb_table = "aws-locks"
+    encrypt        = true
   }
 }
