@@ -1,9 +1,9 @@
-profile                 = "tikal"
+profile                 = "terraform"
 vendor_name             = "tikal"
-region                  = "eu-central-1"
-bucket                  = "tikal-terraform-state"
+region                  = "us-west-2"
+bucket                  = "aaltopiiri-terraform-bucket"
 primary_domain          = "tikal.io"
-dynamodb_table          = "TikalTerraformStatelock"
+dynamodb_table          = "aws-locks"
 env                     = "tf-customer1"
 instance_count          = 1
 key_name                = "client-key"
