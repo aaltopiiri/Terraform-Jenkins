@@ -45,7 +45,7 @@ pipeline {
 							[ $class: 'AmazonWebServicesCredentialsBinding',
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-								credentialsId: 'Tikal-AWS-access',
+								credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 								]])
 							{
 							try {
@@ -87,7 +87,7 @@ pipeline {
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: 'Tikal-AWS-access',
+									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 									]])
 								{
 								try {
@@ -121,7 +121,7 @@ pipeline {
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: 'Tikal-AWS-access',
+									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 									]])
 								{
 								try {
@@ -168,7 +168,7 @@ pipeline {
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: 'Tikal-AWS-access',
+									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 									]])
 								{
 								try {
