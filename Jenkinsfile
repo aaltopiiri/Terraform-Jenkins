@@ -35,9 +35,6 @@ pipeline {
 		string (name: 'PROFILE',
 			   defaultValue: 'terraform',
 			   description: 'Optional. Target aws profile defaults to tikal')
-		string (name: 'EMAIL',
-			   defaultValue: 'natanb@tikalk.com',
-			   description: 'Optional. Email notification')
     }
 	stages {
 		stage('Checkout & Environment Prep'){
@@ -53,7 +50,7 @@ pipeline {
 							{
 							try {
 								echo "Setting up Terraform"
-								def tfHome = tool name: 'terraform-0.12.20',
+								def tfHome = tool name: 'terraform-0.13.1',
 									type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
 									env.PATH = "${tfHome}:${env.PATH}"
 									currentBuild.displayName += "[$AWS_REGION]::[$ACTION]"
@@ -63,7 +60,7 @@ pipeline {
 										/usr/local/bin/aws configure --profile ${PROFILE} set region ${AWS_REGION}
 										export AWS_PROFILE=${PROFILE}
 										export TF_ENV_profile=${PROFILE}
-										mkdir -p /home/jenkins/.terraform.d/plugins/linux_amd64
+										mkdir -p /opt/.terraform.d/plugins/linux_amd64
 									""")
 									tfCmd('version')
 							} catch (ex) {
