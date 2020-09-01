@@ -7,7 +7,7 @@ def tfCmd(String command, String options = '') {
 }
 
 pipeline {
-  agent none
+  agent any
 
 	environment {
 		AWS_DEFAULT_REGION = "${params.AWS_REGION}"
