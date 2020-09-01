@@ -7,7 +7,7 @@ def tfCmd(String command, String options = '') {
 }
 
 pipeline {
-  agent { node { label 'tf-slave' } }
+  agent none
 
 	environment {
 		AWS_DEFAULT_REGION = "${params.AWS_REGION}"
