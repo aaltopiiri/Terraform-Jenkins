@@ -23,11 +23,6 @@ variable "dynamodb_table" {
   description = "Terraform statelock DynamoDB table"
 }
 
-variable "operators" { 
-  type = list(string)
-  description = "List of IAM users to grant access to state"
-}
-
 variable "primary_domain" {
   description = "Domain name to use"
 }

@@ -15,7 +15,4 @@ cluster_version         = "1.14"
 vpc_cidr_block          = "10.0.58.0/23"
 profiling_vpc_id        = "vpc-076d4aa84edf987e1"
 profiling_vpc_cdir      = "10.16.0.0/16"
-operators = [
-  "natanb",
-]
 WORKSPACE                  = "."
