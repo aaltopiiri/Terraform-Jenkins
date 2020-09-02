@@ -40,14 +40,14 @@ pipeline {
 		stage('Checkout & Environment Prep'){
 			steps {
 				script {
-					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+/* 					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
 						withCredentials([
 							[ $class: 'AmazonWebServicesCredentialsBinding',
 								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 								credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 								]])
-							{
+							{ */
 							try {
 								echo "Setting up Terraform"
 								def tfHome = tool name: 'terraform-0.13.1',
@@ -83,12 +83,12 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-							withCredentials([
-								[ $class: 'AmazonWebServicesCredentialsBinding',
-									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-									]])
+							 withCredentials([
+							 	[ $class: 'AmazonWebServicesCredentialsBinding',
+							 		accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+							 		secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+							 		credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
+							 		]])
 								{
 								try {
 									tfCmd('plan', '-detailed-exitcode -out=tfplan')
@@ -117,12 +117,12 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-							withCredentials([
+/* 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-									]])
+									]]) */
 								{
 								try {
 									tfCmd('apply', 'tfplan')
@@ -164,12 +164,12 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-							withCredentials([
+/* 							withCredentials([
 								[ $class: 'AmazonWebServicesCredentialsBinding',
 									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-									]])
+									]]) */
 								{
 								try {
 									tfCmd('destroy', '-auto-approve')
@@ -183,26 +183,4 @@ pipeline {
 			}
 		}	
   	}
-  post
-    {
-			always{
-			emailext (
-			body: """
-				<p>${ENV_NAME} - Jenkins Pipeline ${ACTION} Summary</p>
-				<p>Jenkins url: <a href='${env.BUILD_URL}/>link</a></p>
-				<p>Pipeline Blueocean： <a href='${env.JENKINS_URL}blue/organizations/jenkins/${env.JOB_NAME}/detail/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline'>${env.JOB_NAME}(pipeline page)</a></p>
-			${env.JENKINS_URL}blue/organizations/jenkins/${env.JOB_NAME}/detail/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
-				<ul>
-				<li> Branch built: '${env.BRANCH_NAME}' </li>
-				<li> ACTION: $ACTION</li>
-				<li> REGION: ${AWS_REGION}</li>
-				</ul>
-				""",
-				recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-				to: "${EMAIL}",
-				subject: "[${ENV_NAME}] - ${env.JOB_NAME}-${env.BUILD_NUMBER} [$AWS_REGION][$ACTION]",
-				attachLog: true
-				)
-        }
-    }
 }
