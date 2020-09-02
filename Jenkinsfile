@@ -62,7 +62,7 @@ pipeline {
 						}
 					}
 				}
-			}
+			
 				
 		stage('terraform plan') {
 			when { anyOf
