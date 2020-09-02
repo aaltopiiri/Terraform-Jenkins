@@ -1,6 +1,6 @@
 def tfCmd(String command, String options = '') {
 	ACCESS = "export AWS_PROFILE=${PROFILE} && export TF_ENV_profile=${PROFILE}"
-	sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init") // main
+	sh ("cd $WORKSPACE/base && ${ACCESS} && terraform init") // base
 	sh ("cd $WORKSPACE/main && terraform workspace select ${ENV_NAME} || terraform workspace new ${ENV_NAME}")
 	sh ("echo ${command} ${options}") 
         sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init && terraform ${command} ${options} && terraform show -no-color > show-${ENV_NAME}.txt")
@@ -35,14 +35,23 @@ pipeline {
 		string (name: 'PROFILE',
 			   defaultValue: 'terraform',
 			   description: 'Optional. Target aws profile defaults to tikal')
+
     }
 	stages {
 		stage('Checkout & Environment Prep'){
 			steps {
 				script {
+					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+						withCredentials([
+							[ $class: 'AmazonWebServicesCredentialsBinding',
+								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+								credentialsId: 'amazon',
+								]])
+							{
 							try {
 								echo "Setting up Terraform"
-								def tfHome = tool name: 'terraform-0.13.1',
+								def tfHome = tool name: 'terraform-0.12.20',
 									type: 'org.jenkinsci.plugins.terraform.TerraformInstallation'
 									env.PATH = "${tfHome}:${env.PATH}"
 									currentBuild.displayName += "[$AWS_REGION]::[$ACTION]"
@@ -52,7 +61,7 @@ pipeline {
 										/usr/local/bin/aws configure --profile ${PROFILE} set region ${AWS_REGION}
 										export AWS_PROFILE=${PROFILE}
 										export TF_ENV_profile=${PROFILE}
-										mkdir -p /opt/.terraform.d/plugins/linux_amd64
+										mkdir -p /home/jenkins/.terraform.d/plugins/linux_amd64
 									""")
 									tfCmd('version')
 							} catch (ex) {
@@ -62,8 +71,8 @@ pipeline {
 						}
 					}
 				}
-			
-				
+			}
+		}		
 		stage('terraform plan') {
 			when { anyOf
 					{
@@ -75,6 +84,13 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+							withCredentials([
+								[ $class: 'AmazonWebServicesCredentialsBinding',
+									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+									credentialsId: 'amazon',
+									]])
+								{
 								try {
 									tfCmd('plan', '-detailed-exitcode -out=tfplan')
 								} catch (ex) {
@@ -86,7 +102,7 @@ pipeline {
 										echo "Try running terraform again in debug mode"
 									}
 								}
-							
+							}
 						}
 					}
 				}
@@ -102,12 +118,19 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+							withCredentials([
+								[ $class: 'AmazonWebServicesCredentialsBinding',
+									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+									credentialsId: 'amazon',
+									]])
+								{
 								try {
 									tfCmd('apply', 'tfplan')
 								} catch (ex) {
                   currentBuild.result = "UNSTABLE"
 								}
-							
+							}
 						}
 					}
 				}
@@ -141,19 +164,27 @@ pipeline {
 				}
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) 
-								
+						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+							withCredentials([
+								[ $class: 'AmazonWebServicesCredentialsBinding',
+									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+									credentialsId: 'amazon',
+									]])
+								{
 								try {
 									tfCmd('destroy', '-auto-approve')
 								} catch (ex) {
 									currentBuild.result = "UNSTABLE"
 								}
-							
+							}
 						}
 					}
 				}
 			}
-			
-		}
-    }
+		}	
+  	}
+
+
+
 }
