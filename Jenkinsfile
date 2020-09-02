@@ -83,12 +83,12 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-							 withCredentials([
+/* 							 withCredentials([
 							 	[ $class: 'AmazonWebServicesCredentialsBinding',
 							 		accessKeyVariable: 'AWS_ACCESS_KEY_ID',
 							 		secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 							 		credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-							 		]])
+							 		]]) */
 								{
 								try {
 									tfCmd('plan', '-detailed-exitcode -out=tfplan')
@@ -123,13 +123,13 @@ pipeline {
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 									]]) */
-								{
+								
 								try {
 									tfCmd('apply', 'tfplan')
 								} catch (ex) {
                   currentBuild.result = "UNSTABLE"
 								}
-							}
+							
 						}
 					}
 				}
@@ -170,13 +170,13 @@ pipeline {
 									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 									]]) */
-								{
+								
 								try {
 									tfCmd('destroy', '-auto-approve')
 								} catch (ex) {
 									currentBuild.result = "UNSTABLE"
 								}
-							}
+							
 						}
 					}
 				}
