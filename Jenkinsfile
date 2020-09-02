@@ -25,7 +25,7 @@ pipeline {
 
 		choice (name: 'AWS_REGION',
 				choices: ['eu-central-1','us-west-1', 'us-west-2'],
-				description: 'Pick A regions defaults to eu-central-1')
+				description: 'Pick A regions defaults to us-west-2')
 		string (name: 'ENV_NAME',
 			   defaultValue: 'tf-customer1',
 			   description: 'Env or Customer name')
@@ -34,7 +34,7 @@ pipeline {
 				description: 'Run terraform plan / apply / destroy')
 		string (name: 'PROFILE',
 			   defaultValue: 'terraform',
-			   description: 'Optional. Target aws profile defaults to tikal')
+			   description: 'Optional. Target aws profile defaults to terraform')
 
     }
 	stages {
