@@ -89,7 +89,7 @@ pipeline {
 							 		secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
 							 		credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
 							 		]]) */
-								{
+								
 								try {
 									tfCmd('plan', '-detailed-exitcode -out=tfplan')
 								} catch (ex) {
@@ -101,7 +101,7 @@ pipeline {
 										echo "Try running terraform again in debug mode"
 									}
 								}
-							}
+							
 						}
 					}
 				}
