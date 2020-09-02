@@ -1,6 +1,6 @@
 def tfCmd(String command, String options = '') {
 	ACCESS = "export AWS_PROFILE=${PROFILE} && export TF_ENV_profile=${PROFILE}"
-	sh ("cd $WORKSPACE/base && ${ACCESS} && terraform init") // base
+	sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init") // main
 	sh ("cd $WORKSPACE/main && terraform workspace select ${ENV_NAME} || terraform workspace new ${ENV_NAME}")
 	sh ("echo ${command} ${options}") 
         sh ("cd $WORKSPACE/main && ${ACCESS} && terraform init && terraform ${command} ${options} && terraform show -no-color > show-${ENV_NAME}.txt")
@@ -61,7 +61,7 @@ pipeline {
 										/usr/local/bin/aws configure --profile ${PROFILE} set region ${AWS_REGION}
 										export AWS_PROFILE=${PROFILE}
 										export TF_ENV_profile=${PROFILE}
-										mkdir -p /home/jenkins/.terraform.d/plugins/linux_amd64
+										mkdir -p /tmp/jenkins/.terraform.d/plugins/linux_amd64
 									""")
 									tfCmd('version')
 							} catch (ex) {
