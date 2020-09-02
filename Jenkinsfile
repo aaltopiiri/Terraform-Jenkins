@@ -40,14 +40,6 @@ pipeline {
 		stage('Checkout & Environment Prep'){
 			steps {
 				script {
-/* 					wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-						withCredentials([
-							[ $class: 'AmazonWebServicesCredentialsBinding',
-								accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-								secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-								credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-								]])
-							{ */
 							try {
 								echo "Setting up Terraform"
 								def tfHome = tool name: 'terraform-0.13.1',
@@ -71,7 +63,7 @@ pipeline {
 					}
 				}
 			}
-		}		
+				
 		stage('terraform plan') {
 			when { anyOf
 					{
@@ -83,13 +75,6 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-/* 							 withCredentials([
-							 	[ $class: 'AmazonWebServicesCredentialsBinding',
-							 		accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-							 		secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-							 		credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-							 		]]) */
-								
 								try {
 									tfCmd('plan', '-detailed-exitcode -out=tfplan')
 								} catch (ex) {
@@ -117,13 +102,6 @@ pipeline {
 				dir("${PROJECT_DIR}") {
 					script {
 						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-/* 							withCredentials([
-								[ $class: 'AmazonWebServicesCredentialsBinding',
-									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-									]]) */
-								
 								try {
 									tfCmd('apply', 'tfplan')
 								} catch (ex) {
@@ -163,13 +141,7 @@ pipeline {
 				}
 				dir("${PROJECT_DIR}") {
 					script {
-						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-/* 							withCredentials([
-								[ $class: 'AmazonWebServicesCredentialsBinding',
-									accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-									secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-									credentialsId: '361a701a-788c-4b4d-9230-bdff809004ce',
-									]]) */
+						wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) 
 								
 								try {
 									tfCmd('destroy', '-auto-approve')
@@ -182,5 +154,6 @@ pipeline {
 				}
 			}
 			
-  	}
+		}
+    }
 }
